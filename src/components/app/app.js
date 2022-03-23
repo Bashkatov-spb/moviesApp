@@ -39,7 +39,6 @@ const App = () => {
     if (searchName.trim() !== '') {
       const response = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=e3e2598535421797b16e6b080cd5b8a6&language=en-US&query=${searchName}&page=${currentPage}&include_adult=false`);
       const data = await response.json();
-      console.log(searchName)
       setLoading(false);
       setFindFilms(true);
       setDatafilms(data.results);

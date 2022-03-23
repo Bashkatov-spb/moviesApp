@@ -49,7 +49,6 @@
     width: 45%;
 }
 
-
 .films-list {
     display: flex;
     flex-wrap: wrap;
@@ -66,10 +65,10 @@
 .film-container {
     display: grid;
     grid-template-columns: 180px 135px 135px;
-    grid-template-rows: 1fr 3fr;
     grid-template-areas: 
     "img info info"
-    "img descr descr";
+    "img descr descr"
+    "img rate rate";
 }
 
 .film-img {
@@ -138,7 +137,13 @@
     text-align: center;
 }
 
-@media (min-width: 321px) {
+.ant-rate {
+    grid-area: rate;
+    padding: 10px;
+    align-self: end;
+}
+
+@media (max-width: 321px) {
 
     .container {
         width: 320px;
@@ -160,12 +165,12 @@
     }
 
     .film-container {
-
         grid-template-columns: 70px 210px;
         grid-template-rows: auto;
         grid-template-areas: 
         "img info"
-        "descr descr";
+        "descr descr"
+        "rate rate";
     }
 
     .film-img img {
@@ -196,6 +201,8 @@
         padding: 1px 3px;
     }
 
-
+    .ant-rate {
+        justify-self: end;
+    }
     
 }

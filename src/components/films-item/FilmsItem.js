@@ -1,5 +1,5 @@
 import React from 'react';
-import { format } from 'date-fns/esm';
+/* import { format } from 'date-fns/esm'; */
 import FilmGenres from '../film-genres/FilmGenres';
 import { Rate } from 'antd';
 import 'antd/dist/antd.css';
@@ -35,7 +35,7 @@ const FilmsItem = ({filmData, dataGenres}) => {
         <div className="film-description">
             <span>{overview}</span>
           </div>
-          {/* <Rate style={{fontSize: "17px"}} count={10} allowHalf disabled defaultValue={vote}/> */}
+          <Rate style={{fontSize: "17px"}} count={10} allowHalf disabled defaultValue={vote}/>
       </div>
     </div>
   )

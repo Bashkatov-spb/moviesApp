@@ -1,6 +1,6 @@
 import { Pagination } from 'antd';
 import SearchInput from '../search/SearchInput';
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import FilmsList from '../films-list/FilmsList';
 import Spinner from '../spinner/spinner';
 import './app.css';

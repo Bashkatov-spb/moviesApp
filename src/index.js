@@ -1,17 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom";
+import App from './components/app';
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+/* 
+api key v3 auth - e3e2598535421797b16e6b080cd5b8a6
+example API Request - https://api.themoviedb.org/3/movie/550?api_key=e3e2598535421797b16e6b080cd5b8a6
+API Read Access Token v4 - eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlM2UyNTk4NTM1NDIxNzk3YjE2ZTZiMDgwY2Q1YjhhNiIsInN1YiI6IjYyMzJjZjFiMTA5Y2QwMDAxYmJmOGVmYiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.tURu62VRL5XGHY3GmsKwA6AGk8iX5MWE-zjNhb7QG0s
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+*/
+
+ReactDOM.render(<App />, document.getElementById('root'))

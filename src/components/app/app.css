@@ -34,9 +34,11 @@
     background-color: #fff;
     width: 65px;
     height: 50px;
-}
-.search-buttons button:hover {
     cursor: pointer;
+}
+.search-buttons button:focus {
+
+    outline: none;
     color: #1890FF;
     border-bottom: 2px solid #1890FF;
 }

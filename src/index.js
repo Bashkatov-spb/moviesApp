@@ -1,5 +1,6 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+
 import App from './components/app';
 
 /* 
@@ -9,4 +10,4 @@ API Read Access Token v4 - eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlM2UyNTk4NTM1NDIxNzk3
 
 */
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById('root'));

@@ -9,6 +9,7 @@ export default class SearchInput extends Component {
     const term = e.target.value;
     this.setState({ term });
     this.props.onChange(term);
+    console.log(this.props);
   };
 
   render() {

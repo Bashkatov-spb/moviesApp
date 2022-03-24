@@ -8,6 +8,16 @@ import 'antd/dist/antd.css';
 const FilmsItem = ({ filmData, dataGenres }) => {
   const { title, release_date, genre_ids, poster_path, overview, vote_average } = filmData;
   const date = release_date && format(new Date(release_date), 'MMMM d, yyyy');
+  const arr = overview.split(' ');
+  let str = '';
+  let img =
+    poster_path !== null
+      ? `https://image.tmdb.org/t/p/w500${poster_path}`
+      : 'https://img.freepik.com/free-vector/404-error-page-not-found_41910-343.jpg';
+
+  for (let i = 0; i < 15; i++) {
+    str += arr[i] + ' ';
+  }
 
   const rounded = (number) => {
     let res = number - Math.floor(number);
@@ -23,7 +33,7 @@ const FilmsItem = ({ filmData, dataGenres }) => {
     <div className="film-item">
       <div className="film-container">
         <div className="film-img">
-          <img src={`https://image.tmdb.org/t/p/w500${poster_path}`} alt=""></img>
+          <img src={img} alt=""></img>
         </div>
         <div className="film-info">
           <div className="film-header">
@@ -34,7 +44,7 @@ const FilmsItem = ({ filmData, dataGenres }) => {
           <FilmGenres genre_ids={genre_ids} dataGenres={dataGenres} />
         </div>
         <div className="film-description">
-          <span>{overview}</span>
+          <span>{str + '...'}</span>
         </div>
         <Rate style={{ fontSize: '17px' }} count={10} allowHalf disabled defaultValue={vote} />
       </div>

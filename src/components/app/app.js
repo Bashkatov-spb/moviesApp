@@ -34,7 +34,6 @@ const App = () => {
   };
 
   const getFilmsByName = async (name, page = 1) => {
-    console.log(name);
     if (name.trim() !== '') {
       const res = await swapiService.searchFilms(name, page);
       setDatafilms(res.results);

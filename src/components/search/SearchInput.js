@@ -6,10 +6,10 @@ export default class SearchInput extends Component {
   };
 
   searchFilms = (e) => {
+    console.log(this.props.term);
     const term = e.target.value;
     this.setState({ term });
     this.props.onChange(term);
-    console.log(this.props);
   };
 
   render() {

@@ -4,7 +4,7 @@ import React from 'react';
 function ErrorIndicator() {
   return (
     <div>
-      <Alert message="Error" type="error" description="Where is your internet?" showIcon />
+      <Alert type="warning" description="Film is not found :(" showIcon />
     </div>
   );
 }

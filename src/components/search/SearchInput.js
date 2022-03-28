@@ -5,11 +5,11 @@ export default class SearchInput extends Component {
     term: '',
   };
 
-  searchFilms = (e) => {
-    console.log(this.props.term);
+  onSearchChange = (e) => {
     const term = e.target.value;
     this.setState({ term });
-    this.props.onChange(term);
+    //this.props.onChange(term);
+    this.props.onSearchChange(term);
   };
 
   render() {
@@ -19,7 +19,7 @@ export default class SearchInput extends Component {
         type="text"
         placeholder="Type to search..."
         value={this.state.term}
-        onChange={this.searchFilms}
+        onChange={this.onSearchChange}
       ></input>
     );
   }

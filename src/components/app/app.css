@@ -74,11 +74,11 @@
 }
 
 .film-img {
-    border-radius: 3px 0 0 3px;
     grid-area: img;
 }
 
 .film-img img {
+    border-radius: 3px 0 0 3px;
     width: 180px;
     height: 280px;
 }
@@ -106,7 +106,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #E9D100;
 }
 
 .film-date {

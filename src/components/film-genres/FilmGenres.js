@@ -1,7 +1,7 @@
 import React from 'react';
 
-const FilmGenres = ({ genre_ids, dataGenres }) => {
-  const genres = [
+const FilmGenres = ({ genre_ids }) => {
+  const genr = [
     { id: 28, name: 'Action' },
     { id: 12, name: 'Adventure' },
     { id: 16, name: 'Animation' },
@@ -22,10 +22,9 @@ const FilmGenres = ({ genre_ids, dataGenres }) => {
     { id: 10752, name: 'War' },
     { id: 37, name: 'Western' },
   ];
-
   return (
     <div className="films-genres">
-      {genres.map((item) =>
+      {genr.map((item) =>
         genre_ids.map(
           (genre) =>
             genre === item.id && (

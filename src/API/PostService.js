@@ -1,14 +1,43 @@
+const apiKey = 'e3e2598535421797b16e6b080cd5b8a6';
+
 export default class SwapiService {
   async getResource(url) {
     const res = await fetch(url);
 
-    return res.json();
+    if (!res.ok) {
+      throw new Error('DIE!!!');
+    }
+    return await res.json();
   }
 
-  async getGenres() {
-    const res = await fetch(
-      'https://api.themoviedb.org/3/genre/movie/list?api_key=e3e2598535421797b16e6b080cd5b8a6&language=en-US'
+  guestSession = () => {
+    return this.getResource(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${apiKey}`);
+  };
+
+  getRatedFilms = (id) => {
+    return this.getResource(
+      `https://api.themoviedb.org/3/guest_session/${id}/rated/movies?api_key=${apiKey}&language=en-US&sort_by=created_at.asc`
     );
+  };
+
+  rateFilm = async (rate, sessionId, movieId) => {
+    const vote = {
+      value: rate,
+    };
+    await fetch(
+      `https://api.themoviedb.org/3/movie/${movieId}/rating?api_key=${apiKey}&guest_session_id=${sessionId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json;charset=utf-8',
+        },
+        body: JSON.stringify(vote),
+      }
+    );
+  };
+
+  async getGenres() {
+    const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`);
     return await res.json();
   }
 

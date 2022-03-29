@@ -2,12 +2,15 @@ import React, { useState } from 'react';
 import { format } from 'date-fns/esm';
 import { Rate } from 'antd';
 
+import SwapiService from '../../API/PostService';
 import FilmGenres from '../film-genres/FilmGenres';
 import 'antd/dist/antd.css';
 
-const FilmsItem = ({ filmData }) => {
-  const [rating, setRating] = useState(0);
-  const { title, release_date, genre_ids, genres, poster_path, overview, vote_average } = filmData;
+const FilmsItem = ({ filmData, guestId }) => {
+  const swapiService = new SwapiService();
+  const [rate, setRate] = useState(0);
+  const { title, release_date, genre_ids, genres, poster_path, overview, vote_average, rating, id } = filmData;
+  const guestSessionId = guestId;
   const genre = [];
   const vote = vote_average;
   let colour = '';
@@ -30,7 +33,6 @@ const FilmsItem = ({ filmData }) => {
   }
   const date = release_date && format(new Date(release_date), 'MMMM d, yyyy');
   const arr = overview.split(' ');
-  let rate = rating;
   let str = '';
   let img =
     poster_path !== null
@@ -41,13 +43,9 @@ const FilmsItem = ({ filmData }) => {
     str += arr[i] + ' ';
   }
 
-  if (localStorage.getItem(filmData.id)) {
-    rate = localStorage.getItem(filmData.id);
-  }
-
-  const writeRateFilm = (rating) => {
-    setRating(rating);
-    localStorage.setItem(filmData.id, rating);
+  const rateFilm = (rating) => {
+    swapiService.rateFilm(rating, guestSessionId, id);
+    setRate(rating);
   };
 
   return (
@@ -73,8 +71,8 @@ const FilmsItem = ({ filmData }) => {
           style={{ fontSize: '17px' }}
           count={10}
           allowHalf
-          value={Number(rate)}
-          onChange={(number) => writeRateFilm(number)}
+          value={Number(rating ? rating : rate)}
+          onChange={(number) => rateFilm(number)}
         />
       </div>
     </div>

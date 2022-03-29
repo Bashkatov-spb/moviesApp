@@ -8,7 +8,6 @@ export default class SearchInput extends Component {
   onSearchChange = (e) => {
     const term = e.target.value;
     this.setState({ term });
-    //this.props.onChange(term);
     this.props.onSearchChange(term);
   };
 

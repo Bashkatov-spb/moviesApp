@@ -5,7 +5,7 @@ export default class SwapiService {
     const res = await fetch(url);
 
     if (!res.ok) {
-      throw new Error('DIE!!!');
+      throw new Error(res.status);
     }
     return await res.json();
   }
@@ -36,10 +36,9 @@ export default class SwapiService {
     );
   };
 
-  async getGenres() {
-    const res = await fetch(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`);
-    return await res.json();
-  }
+  getGenres = () => {
+    return this.getResource(`https://api.themoviedb.org/3/genre/movie/list?api_key=${apiKey}&language=en-US`);
+  };
 
   async getFilmById(id) {
     return await this.getResource(

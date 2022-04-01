@@ -1,16 +1,30 @@
-import React from 'react';
+import React, { Component } from 'react';
 
 import FilmsItem from '../films-item/FilmsItem';
 
-const FilmsList = ({ dataFilms, dataGenres, guestId }) => {
-  return (
-    <div className="films-list">
-      {dataFilms !== undefined &&
-        dataFilms.map((element) => (
-          <FilmsItem key={element.id} filmData={element} dataGenres={dataGenres} guestId={guestId} />
-        ))}
-    </div>
-  );
-};
+export default class FilmsList extends Component {
+  state = {
+    genres: [],
+  };
 
-export default FilmsList;
+  componentDidMount() {
+    this._isMounted = true;
+    this.props.getGenres().then((res) => this.setState({ genres: res.genres }));
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
+  render() {
+    const { dataFilms, guestId } = this.props;
+    return (
+      <div className="films-list">
+        {dataFilms !== undefined &&
+          dataFilms.map((element) => (
+            <FilmsItem key={element.id} filmData={element} genres={this.state.genres} guestId={guestId} />
+          ))}
+      </div>
+    );
+  }
+}

@@ -3,34 +3,28 @@ import { format } from 'date-fns/esm';
 import { Rate } from 'antd';
 
 import SwapiService from '../../API/PostService';
-import FilmGenres from '../film-genres/FilmGenres';
+import FilmGenres from '../film-genres/FilmsGenres';
 import 'antd/dist/antd.css';
 
-const FilmsItem = ({ filmData, guestId }) => {
+const FilmsItem = ({ filmData, guestId, genres }) => {
   const swapiService = new SwapiService();
   const [rate, setRate] = useState(0);
-  const { title, release_date, genre_ids, genres, poster_path, overview, vote_average, rating, id } = filmData;
-  const guestSessionId = guestId;
-  const genre = [];
-  const vote = vote_average;
+  const { title, release_date, genre_ids, poster_path, overview, vote_average, rating, id } = filmData;
   let colour = '';
 
-  if (vote >= 0 && vote < 3) {
+  if (vote_average >= 0 && vote_average < 3) {
     colour = '#E90000';
   }
-  if (vote >= 3 && vote < 5) {
+  if (vote_average >= 3 && vote_average < 5) {
     colour = '#E97E00';
   }
-  if (vote >= 5 && vote < 7) {
+  if (vote_average >= 5 && vote_average < 7) {
     colour = '#E9D100';
   }
-  if (vote > 7) {
+  if (vote_average > 7) {
     colour = '#66E900';
   }
 
-  if (genres !== undefined) {
-    genres.map((item) => genre.push(item.id));
-  }
   const date = release_date && format(new Date(release_date), 'MMMM d, yyyy');
   const arr = overview.split(' ');
   let str = '';
@@ -44,7 +38,7 @@ const FilmsItem = ({ filmData, guestId }) => {
   }
 
   const rateFilm = (rating) => {
-    swapiService.rateFilm(rating, guestSessionId, id);
+    swapiService.rateFilm(rating, guestId, id);
     setRate(rating);
   };
 
@@ -62,7 +56,7 @@ const FilmsItem = ({ filmData, guestId }) => {
             </div>
           </div>
           <p className="film-date">{date}</p>
-          <FilmGenres genre_ids={genre_ids ? genre_ids : genre} />
+          <FilmGenres genres={genres} genre_ids={genre_ids} />
         </div>
         <div className="film-description">
           <span>{str + '...'}</span>

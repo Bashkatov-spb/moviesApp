@@ -9,9 +9,11 @@ import Spinner from '../spinner/spinner';
 import SwapiService from '../../API/PostService';
 import './app.css';
 import Buttons from '../buttons/buttons';
-const GenresContext = React.createContext();
+import { SwapiServiceConsumer, SwapiServiceProvider } from '../../API/SwapiServiceContext';
 
 export default class App extends Component {
+  _isMounted = false;
+
   state = {
     page: 1,
     dataFilms: [],
@@ -19,17 +21,16 @@ export default class App extends Component {
     term: 'return',
     findFilms: false,
     totalResults: 1,
-    error: false,
     sessionId: '',
     isRated: false,
-    genres: [],
+    error: false,
   };
   swapiService = new SwapiService();
 
   componentDidMount() {
+    this._isMounted = true;
     this.getFilmsByName('return');
     this.authentication();
-    this.getAllgenres();
   }
 
   authentication = () => {
@@ -40,38 +41,40 @@ export default class App extends Component {
     });
   };
 
-  getAllgenres = () => {
-    this.swapiService.getGenres().then((res) => {
-      this.setState({
-        genres: res,
-      });
-    });
+  getMyRatedFilms = () => {
+    this.swapiService
+      .getRatedFilms(this.state.sessionId)
+      .then((res) => {
+        this.setState({
+          dataFilms: res.results,
+          isRated: true,
+        });
+      })
+      .catch((e) => this.onError(e));
   };
 
-  getMyRatedFilms = async () => {
-    this.swapiService.getRatedFilms(this.state.sessionId).then((res) => {
-      this.setState({
-        dataFilms: res.results,
-        isRated: true,
-      });
-    });
-  };
-
-  getFilmsByName = async (name, page = 1) => {
+  getFilmsByName = (name, page = 1) => {
+    /* this.setState({
+      loading: true,
+    }); */
     if (name.trim() !== '') {
-      const res = await this.swapiService.searchFilms(name, page);
-      this.setState({
-        dataFilms: res.results,
-        loading: false,
-        findFilms: true,
-        page: page,
-        totalResults: res.total_results,
-        isRated: false,
-      });
+      this.swapiService
+        .searchFilms(name, page)
+        .then((res) => {
+          this.setState({
+            dataFilms: res.results,
+            loading: false,
+            findFilms: true,
+            page: page,
+            totalResults: res.total_results,
+            isRated: false,
+          });
+        })
+        .catch((e) => this.onError(e));
     } else {
       this.setState({
         dataFilms: [],
-        loading: true,
+        loading: false,
         findFilms: false,
         totalResults: 1,
       });
@@ -96,6 +99,18 @@ export default class App extends Component {
     });
   };
 
+  onError = (err) => {
+    console.log(err);
+    this.setState({
+      error: true,
+      loading: false,
+    });
+  };
+
+  componentWillUnmount() {
+    this._isMounted = false;
+  }
+
   debounceSearch = debounce((term) => {
     this.setState({
       term: term,
@@ -104,29 +119,40 @@ export default class App extends Component {
   }, 1000);
 
   render() {
-    const { dataFilms, term, loading, totalResults, error, sessionId, page, isRated } = this.state;
+    const { dataFilms, term, loading, totalResults, sessionId, page, isRated, error } = this.state;
     const visibleFilms = this.search(dataFilms, term);
-    const isVisible = !error && !loading ? true : false;
-    const showWarning = visibleFilms.length === 0 && !loading;
+    const hasData = !(loading || error);
+    const showWarningMessage =
+      visibleFilms.length === 0 && !loading && !error ? <h1 style={{ margin: '20px' }}>Film is not found!</h1> : null;
+    const errorMessage = error ? <ErrorIndicator /> : null;
+    const searchPanel = !isRated && <SearchInput onSearchChange={this.debounceSearch} />;
+    const spinner = loading ? <Spinner /> : null;
+    const pagination = hasData && (
+      <Pagination
+        className="films-pagination"
+        onChange={(choosePage) => this.updatePageNumber(choosePage)}
+        current={page}
+        total={visibleFilms.length < 20 ? visibleFilms.length : totalResults}
+        showSizeChanger={false}
+        responsive={true}
+      />
+    );
 
     return (
       <div className="container">
-        <Buttons getMyRatedFilms={this.getMyRatedFilms} getFilmsByName={this.getFilmsByName} term={term} />
-        {!isRated && <SearchInput onSearchChange={this.debounceSearch} />}
-        {showWarning && !loading ? <ErrorIndicator /> : null}
-        <GenresContext.Provider value={this.state.genres}>
-          {loading ? <Spinner /> : <FilmsList dataFilms={visibleFilms} guestId={sessionId} />}
-        </GenresContext.Provider>
-        {isVisible && (
-          <Pagination
-            className="films-pagination"
-            onChange={(choosePage) => this.updatePageNumber(choosePage)}
-            current={page}
-            total={visibleFilms.length < 20 ? visibleFilms.length : totalResults}
-            showSizeChanger={false}
-            responsive={true}
-          />
-        )}
+        <SwapiServiceProvider value={this.swapiService}>
+          <Buttons getMyRatedFilms={this.getMyRatedFilms} getFilmsByName={this.getFilmsByName} term={term} />
+          {searchPanel}
+          {errorMessage}
+          {showWarningMessage}
+          {spinner}
+          <SwapiServiceConsumer>
+            {({ getGenres }) =>
+              hasData ? <FilmsList getGenres={getGenres} dataFilms={visibleFilms} guestId={sessionId} /> : null
+            }
+          </SwapiServiceConsumer>
+          {pagination}
+        </SwapiServiceProvider>
       </div>
     );
   }

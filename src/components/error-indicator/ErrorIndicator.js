@@ -3,8 +3,8 @@ import React from 'react';
 
 function ErrorIndicator() {
   return (
-    <div>
-      <Alert type="warning" description="Film is not found :(" showIcon />
+    <div style={{ marginBottom: '20px' }}>
+      <Alert type="error" description="You have error with internet connection :(" showIcon />
     </div>
   );
 }

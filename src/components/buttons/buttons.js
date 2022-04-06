@@ -6,13 +6,16 @@ export default class Buttons extends Component {
   };
 
   render() {
-    const { getFilmsByName, getMyRatedFilms } = this.props;
+    const { getFilmsByName, getMyRatedFilms, isRated } = this.props;
     return (
       <div className="search-buttons">
-        <button autoFocus className="button-search" onClick={() => getFilmsByName(this.state.term)}>
+        <button
+          className={!isRated ? 'button-search active' : 'button-search'}
+          onClick={(e) => getFilmsByName(this.state.term)}
+        >
           Search
         </button>
-        <button className="button-rated" onClick={() => getMyRatedFilms()}>
+        <button className={isRated ? 'button-rated active' : 'button-rated'} onClick={() => getMyRatedFilms()}>
           Rated
         </button>
       </div>

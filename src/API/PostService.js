@@ -14,9 +14,9 @@ export default class SwapiService {
     return this.getResource(`https://api.themoviedb.org/3/authentication/guest_session/new?api_key=${apiKey}`);
   };
 
-  getRatedFilms = (id) => {
+  getRatedFilms = (id, page) => {
     return this.getResource(
-      `https://api.themoviedb.org/3/guest_session/${id}/rated/movies?api_key=${apiKey}&language=en-US&sort_by=created_at.asc`
+      `https://api.themoviedb.org/3/guest_session/${id}/rated/movies?api_key=${apiKey}&language=en-US&page=${page}&sort_by=created_at.asc`
     );
   };
 

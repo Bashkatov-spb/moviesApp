@@ -17,12 +17,18 @@ export default class FilmsList extends Component {
   }
 
   render() {
-    const { dataFilms, guestId } = this.props;
+    const { dataFilms, guestId, ratingArr } = this.props;
     return (
       <div className="films-list">
         {dataFilms !== undefined &&
           dataFilms.map((element) => (
-            <FilmsItem key={element.id} filmData={element} genres={this.state.genres} guestId={guestId} />
+            <FilmsItem
+              key={element.id}
+              filmData={element}
+              genres={this.state.genres}
+              guestId={guestId}
+              ratingArr={ratingArr}
+            />
           ))}
       </div>
     );

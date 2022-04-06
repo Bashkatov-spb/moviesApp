@@ -31,6 +31,7 @@ export default class App extends Component {
     this._isMounted = true;
     this.getFilmsByName('return');
     this.authentication();
+    localStorage.clear(); // <------ Не знаю, нужно ли чистить локал сторэдж, решил оставить
   }
 
   authentication = () => {
@@ -41,22 +42,21 @@ export default class App extends Component {
     });
   };
 
-  getMyRatedFilms = () => {
+  getMyRatedFilms = (page = 1) => {
     this.swapiService
-      .getRatedFilms(this.state.sessionId)
+      .getRatedFilms(this.state.sessionId, page)
       .then((res) => {
         this.setState({
           dataFilms: res.results,
           isRated: true,
+          totalResults: res.total_results,
+          page: page,
         });
       })
       .catch((e) => this.onError(e));
   };
 
   getFilmsByName = (name, page = 1) => {
-    /* this.setState({
-      loading: true,
-    }); */
     if (name.trim() !== '') {
       this.swapiService
         .searchFilms(name, page)
@@ -82,7 +82,7 @@ export default class App extends Component {
   };
 
   updatePageNumber = (number) => {
-    if (this.state.rated) {
+    if (this.state.isRated) {
       return this.getMyRatedFilms(number);
     }
     if (this.state.findFilms) {
@@ -90,17 +90,7 @@ export default class App extends Component {
     }
   };
 
-  search = (films, term) => {
-    if (term.length === 0) {
-      return films;
-    }
-    return films.filter((film) => {
-      return film.title.toLowerCase().indexOf(term.toLowerCase()) > -1;
-    });
-  };
-
   onError = (err) => {
-    console.log(err);
     this.setState({
       error: true,
       loading: false,
@@ -120,10 +110,9 @@ export default class App extends Component {
 
   render() {
     const { dataFilms, term, loading, totalResults, sessionId, page, isRated, error } = this.state;
-    const visibleFilms = this.search(dataFilms, term);
     const hasData = !(loading || error);
     const showWarningMessage =
-      visibleFilms.length === 0 && !loading && !error ? <h1 style={{ margin: '20px' }}>Film is not found!</h1> : null;
+      dataFilms.length === 0 && !loading && !error ? <h1 style={{ margin: '20px' }}>Film is not found!</h1> : null;
     const errorMessage = error ? <ErrorIndicator /> : null;
     const searchPanel = !isRated && <SearchInput onSearchChange={this.debounceSearch} />;
     const spinner = loading ? <Spinner /> : null;
@@ -132,23 +121,28 @@ export default class App extends Component {
         className="films-pagination"
         onChange={(choosePage) => this.updatePageNumber(choosePage)}
         current={page}
-        total={visibleFilms.length < 20 ? visibleFilms.length : totalResults}
+        defaultPageSize={20}
+        total={totalResults}
         showSizeChanger={false}
         responsive={true}
       />
     );
-
     return (
       <div className="container">
         <SwapiServiceProvider value={this.swapiService}>
-          <Buttons getMyRatedFilms={this.getMyRatedFilms} getFilmsByName={this.getFilmsByName} term={term} />
+          <Buttons
+            getMyRatedFilms={this.getMyRatedFilms}
+            getFilmsByName={this.getFilmsByName}
+            isRated={isRated}
+            term={term}
+          />
           {searchPanel}
           {errorMessage}
           {showWarningMessage}
           {spinner}
           <SwapiServiceConsumer>
             {({ getGenres }) =>
-              hasData ? <FilmsList getGenres={getGenres} dataFilms={visibleFilms} guestId={sessionId} /> : null
+              hasData ? <FilmsList getGenres={getGenres} dataFilms={dataFilms} guestId={sessionId} /> : null
             }
           </SwapiServiceConsumer>
           {pagination}

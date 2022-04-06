@@ -6,10 +6,19 @@ import SwapiService from '../../API/PostService';
 import FilmGenres from '../film-genres/FilmsGenres';
 import 'antd/dist/antd.css';
 
-const FilmsItem = ({ filmData, guestId, genres }) => {
+const FilmsItem = ({ filmData, guestId, genres, ratingArr }) => {
   const swapiService = new SwapiService();
-  const [rate, setRate] = useState(0);
-  const { title, release_date, genre_ids, poster_path, overview, vote_average, rating, id } = filmData;
+  const [rate, setRate] = useState('');
+  const {
+    title,
+    release_date,
+    genre_ids,
+    poster_path,
+    overview,
+    vote_average,
+    id,
+    rating = +localStorage.getItem(id),
+  } = filmData;
   let colour = '';
 
   if (vote_average >= 0 && vote_average < 3) {
@@ -38,6 +47,7 @@ const FilmsItem = ({ filmData, guestId, genres }) => {
   }
 
   const rateFilm = (rating) => {
+    localStorage.setItem(id, rating);
     swapiService.rateFilm(rating, guestId, id);
     setRate(rating);
   };
@@ -46,7 +56,7 @@ const FilmsItem = ({ filmData, guestId, genres }) => {
     <div className="film-item">
       <div className="film-container">
         <div className="film-img">
-          <img src={img} alt=""></img>
+          <img src={img} alt="film-poster"></img>
         </div>
         <div className="film-info">
           <div className="film-header">

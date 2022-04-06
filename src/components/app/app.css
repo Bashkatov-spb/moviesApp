@@ -36,8 +36,8 @@
     height: 50px;
     cursor: pointer;
 }
-.search-buttons button:focus {
-
+.button-search.active,
+.button-rated.active {
     outline: none;
     color: #1890FF;
     border-bottom: 2px solid #1890FF;

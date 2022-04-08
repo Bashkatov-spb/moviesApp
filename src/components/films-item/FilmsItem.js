@@ -43,7 +43,9 @@ const FilmsItem = ({ filmData, guestId, genres, ratingArr }) => {
       : 'https://img.freepik.com/free-vector/404-error-page-not-found_41910-343.jpg';
 
   for (let i = 0; i < 15; i++) {
-    str += arr[i] + ' ';
+    if (arr[i] !== undefined) {
+      str += arr[i] + ' ';
+    }
   }
 
   const rateFilm = (rating) => {

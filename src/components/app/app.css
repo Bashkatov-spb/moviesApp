@@ -58,8 +58,8 @@
     margin-bottom: 15px;
 }
 .film-item {
+    position: relative;
     width: 450px;
-    height: 280px;
     box-shadow: 3px 5px 8px 0px rgba(34, 60, 80, 0.4);
     margin: 10px;
     border-radius: 3px;
@@ -126,8 +126,7 @@
 
 .film-description {
     padding: 0 10px 10px 10px;
-    height: 70px;
-    overflow: hidden;
+    margin-bottom: 25px;
 	display: -webkit-box;
 	-webkit-line-clamp: 6;
 	-webkit-box-orient: vertical;
@@ -139,7 +138,9 @@
 }
 
 .ant-rate {
-    grid-area: rate;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
     padding: 10px;
     align-self: end;
 }
